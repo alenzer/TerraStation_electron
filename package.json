@@ -1,0 +1,48 @@
+{
+  "name": "station-electron",
+  "version": "1.2.0",
+  "description": "Wallet for Terra Blockchain",
+  "author": "Terraform Labs Pte. Ltd. <engineering@terra.money> (https://terra.money)",
+  "license": "ISC",
+  "main": "public/electron.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/terra-money/station-desktop.git"
+  },
+  "dependencies": {
+    "bech32": "^2.0.0",
+    "bip32": "^2.0.4",
+    "bip39": "^3.0.2",
+    "electron-debug": "^3.2.0",
+    "secp256k1": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/secp256k1": "^4.0.1",
+    "electron": "^16.0.7",
+    "electron-builder": "^22",
+    "prettier": "^2.0.5"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build-linux": "electron-builder -l --config build-linux.json",
+    "build-macwin": "electron-builder -mw --config build-macwin.json",
+    "postinstall": "electron-builder install-app-deps",
+    "prettier": "prettier --write public/**/*.js"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false
+  }
+}
