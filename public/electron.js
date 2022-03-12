@@ -20,6 +20,10 @@ const createWindow = () => {
     maxWidth: isLocal ? 3840 : 1440,
     // titleBarStyle: 'hidden',
     webPreferences: {
+      webviewTag : true,
+      nodeIntegration: true, // is default value after Electron v5
+      contextIsolation: false, // protect against prototype pollution
+      enableRemoteModule: false, // turn off remote
       preload: path.join(__dirname, 'preload.js'),
     },
   }
@@ -57,20 +61,22 @@ const createWindow = () => {
     shell.openExternal(url)
   })
 
-  const reactDevToolsPath ="C:\\Users\\Webdeveloper\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 18\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi\\4.23.0_0"
+  // const reactDevToolsPath ="C:\\Users\\Webdeveloper\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 18\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi\\4.23.0_0"
 
-  const walletPath = "C:\\Users\\Webdeveloper\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 8\\Extensions\\aiifbnbfobpmeekipheeijimdpnlpgpp"
+  const walletPath = "C:\\Users\\Webdeveloper\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 7\\Extensions\\aiifbnbfobpmeekipheeijimdpnlpgpp\\2.6.1_0"
 
   app.whenReady().then(async () => {
-    await session.defaultSession.loadExtension(reactDevToolsPath)
+    // await session.defaultSession.loadExtension(reactDevToolsPath)
+
     await session.defaultSession.loadExtension(walletPath)
+
   })
 
   win.webContents.session.webRequest.onHeadersReceived(
-    {urls: ['*://*/*']},
+    { urls: ['*://*/*'] },
     (details, callback) => {
       Object.keys(details.responseHeaders).filter(x => x.toLowerCase() === 'x-frame-options')
-            .map(x => delete details.responseHeaders[x])
+        .map(x => delete details.responseHeaders[x])
 
       callback({
         cancel: false,
