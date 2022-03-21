@@ -22,7 +22,7 @@ const createWindow = () => {
     webPreferences: {
       webviewTag : true,
       nodeIntegration: true, // is default value after Electron v5
-      contextIsolation: false, // protect against prototype pollution
+      contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -33,6 +33,8 @@ const createWindow = () => {
     : 'https://station.terra.money'
 
   win = new BrowserWindow(config)
+  win.webContents.setUserAgent("5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36");
+                                    //  5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) station-electron/1.2.0 Chrome/96.0.4664.174 Electron/16.1.0 Safari/537.36
   win.removeMenu()
   win.loadURL(url)
   win.on('closed', () => (win = null))
@@ -41,6 +43,7 @@ const createWindow = () => {
   win.webContents
     .setVisualZoomLevelLimits(1, 10)
     .catch((err) => console.log(err))
+  win.webContents.openDevTools()
 
   const zoomFunction = (win, event, zoomDirection) => {
     const currentZoom = win.webContents.getZoomFactor()
@@ -63,13 +66,28 @@ const createWindow = () => {
 
   // const reactDevToolsPath ="C:\\Users\\Webdeveloper\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 18\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi\\4.23.0_0"
 
-  const walletPath = "C:\\Users\\Webdeveloper\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 7\\Extensions\\aiifbnbfobpmeekipheeijimdpnlpgpp\\2.6.1_0"
+  // const walletPath = "C:\\Users\\Webdeveloper\\AppData\\Local\\Google\\Chrome\\User Data\\Profile 7\\Extensions\\aiifbnbfobpmeekipheeijimdpnlpgpp\\2.6.1_0"
+
+  const walletPath = "terra_wallet"
+
+  const createPopup = (file) => {
+    return new BrowserWindow({
+      title: 'MetaMask',
+      width: isLocal ? 800 : 600,
+      height: 600,
+      // type: 'popup',
+      // resizable: false
+    });
+  };
 
   app.whenReady().then(async () => {
     // await session.defaultSession.loadExtension(reactDevToolsPath)
 
-    await session.defaultSession.loadExtension(walletPath)
+    await session.defaultSession.loadExtension(path.join(__dirname, walletPath));
 
+    metamaskPopup = createPopup();
+    metamaskPopup.loadURL(`chrome-extension://aiifbnbfobpmeekipheeijimdpnlpgpp/index.html`);
+    metamaskPopup.webContents.openDevTools()
   })
 
   win.webContents.session.webRequest.onHeadersReceived(

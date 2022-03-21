@@ -1,0 +1,32 @@
+{
+   "background": {
+      "persistent": true,
+      "scripts": [ "background.js" ]
+   },
+   "browser_action": {
+      "default_icon": "icon-32.png",
+      "default_popup": "index.html"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "contentScript.js" ],
+      "matches": [ "\u003Call_urls>" ],
+      "run_at": "document_start"
+   } ],
+   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+   "differential_fingerprint": "1.b24005c5ac64037c49b6bda359db49004e679ea54c4d5adf706d8d62376627d8",
+   "icons": {
+      "128": "icon-128.png",
+      "180": "icon-180.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6vq3VB+nGFO5zMoUm3u9JbpiDLpRT118rq7J0I8w+5xsjkq3DWQ5w3pGYOno8EEJJFkSSG2oFQlw2Bcbnv04fWyajaybLG9Ne3Ue+/fa4jIqRgT8uwqHyjOIHGr5trtHo1PM80WX5sKzA5nntOG+DUQUmUMABK5X8zwj03OydQCOX3w6NT06tSx6QU54/mM84xLOFyz4Dd+K4AI+PT7/vU9TGcPhmCMt06Kr5MA6xwengdTZFCu+I/SX3mUDkR/4AYYJyFwpv88ZOAU8KRu2J7AtoLSAYjx2NbRdd0aV+H+F3In3k4Hwxzu+N9+EJIPxbRgrSlcgc69iNrHGW4k2zwIDAQAB",
+   "manifest_version": 2,
+   "name": "Terra Station Wallet",
+   "options_ui": {
+      "page": "index.html"
+   },
+   "permissions": [ "storage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.7.0",
+   "web_accessible_resources": [ "inpage.js" ]
+}
