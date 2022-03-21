@@ -1,5 +1,5 @@
 const path = require('path')
-const { app, shell, BrowserWindow, ipcMain, session } = require('electron')
+const { app, shell, BrowserWindow, ipcMain, session, BrowserView } = require('electron')
 const debug = require('electron-debug')
 
 /* enable devtools hotkeys in Windows production builds */
@@ -70,24 +70,21 @@ const createWindow = () => {
 
   const walletPath = "terra_wallet"
 
-  const createPopup = (file) => {
-    return new BrowserWindow({
-      title: 'MetaMask',
-      width: isLocal ? 800 : 600,
-      height: 600,
-      // type: 'popup',
-      // resizable: false
-    });
-  };
+  // const createPopup = (file) => {
+  //   return new BrowserWindow({
+  //     title: 'MetaMask',
+  //     width: isLocal ? 800 : 600,
+  //     height: 600,
+  //     titleBarStyle: 'hidden',
+  //     // type: 'popup',
+  //     // resizable: false
+  //   });
+  // };
 
   app.whenReady().then(async () => {
     // await session.defaultSession.loadExtension(reactDevToolsPath)
 
     await session.defaultSession.loadExtension(path.join(__dirname, walletPath));
-
-    metamaskPopup = createPopup();
-    metamaskPopup.loadURL(`chrome-extension://aiifbnbfobpmeekipheeijimdpnlpgpp/index.html`);
-    metamaskPopup.webContents.openDevTools()
   })
 
   win.webContents.session.webRequest.onHeadersReceived(
@@ -146,4 +143,38 @@ ipcMain.on('encrypt', (event, [msg, pass]) => {
 
 ipcMain.on('decrypt', (event, [msg, pass]) => {
   event.returnValue = decrypt(msg, pass)
+})
+
+let metamaskPopup;
+
+ipcMain.on('connectWallet', (event, arg) => {
+  if(metamaskPopup && !metamaskPopup.isDestroyed()) metamaskPopup.close();
+  
+  metamaskPopup = new BrowserWindow({
+    title: 'MetaMask',
+    width: isLocal ? 800 : 600,
+    height: 600,
+    // type: 'popup',
+    // resizable: false
+  });
+  metamaskPopup.loadURL(`chrome-extension://aiifbnbfobpmeekipheeijimdpnlpgpp/index.html`);
+  metamaskPopup.webContents.openDevTools()
+
+  metamaskPopup.on('close', function() { //   <---- Catch close event
+console.log("close button");
+    if(metamaskPopup && !metamaskPopup.isDestroyed()){
+      metamaskPopup.hide();
+    }
+  });
+  // const view = new BrowserView({
+  //   resizable: true,
+  //   titleBarStyle: 'show',
+  // })
+  // win.setBrowserView(view)
+  // view.setBounds({ x: 0, y: 0, width: 300, height: 300 })
+  // view.webContents.loadURL("chrome-extension://aiifbnbfobpmeekipheeijimdpnlpgpp/index.html");
+  event.sender.send("return");
+  event.returnValue = "return";
+  return "EIOWE";
+  console.log("return");
 })
