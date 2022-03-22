@@ -166,15 +166,8 @@ console.log("close button");
       metamaskPopup.hide();
     }
   });
-  // const view = new BrowserView({
-  //   resizable: true,
-  //   titleBarStyle: 'show',
-  // })
-  // win.setBrowserView(view)
-  // view.setBounds({ x: 0, y: 0, width: 300, height: 300 })
-  // view.webContents.loadURL("chrome-extension://aiifbnbfobpmeekipheeijimdpnlpgpp/index.html");
-  event.sender.send("return");
+
   event.returnValue = "return";
-  return "EIOWE";
   console.log("return");
+  return "EIOWE";
 })
