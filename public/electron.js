@@ -23,7 +23,7 @@ const createWindow = () => {
       webviewTag : true,
       nodeIntegration: true, // is default value after Electron v5
       contextIsolation: true, // protect against prototype pollution
-      enableRemoteModule: false, // turn off remote
+      enableRemoteModule: true, // turn off remote
       preload: path.join(__dirname, 'preload.js'),
     },
   }
